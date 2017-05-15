@@ -1,0 +1,76 @@
+
+SPARQL queries on chronic dataset
+
+
+###########################################################################
+
+recorded disease cases per state per year
+
+
+PREFIX team:<http://utdallas.edu/incognito#/source/home/dataset/sandy/vocab/raw/>
+
+SELECT ?l ?y ?t (count(?t) as ?a)
+		WHERE {
+		graph ?graph_chronic{
+		  ?s team:locationabbr ?l .
+		  ?s team:topic ?t .
+		  ?s team:yearend ?y.
+  		}
+		}
+	
+group by ?l ?y ?t
+		
+order by ?l ?y
+
+
+#######################################################################################
+
+
+
+no . of disease cases per year 
+
+
+PREFIX team:<http://utdallas.edu/incognito#/source/home/dataset/sandy/vocab/raw/>
+
+SELECT  ?y  (count(?t) as ?a)
+		WHERE {
+  
+  graph ?graph_chronic{
+		  ?s team:locationabbr ?l .
+		  ?s team:topic ?t .
+		  ?s team:yearend ?y.
+  }
+		}
+	
+group by  ?y 
+		
+order by ?y
+
+
+
+
+#########################################################################################
+
+
+no . of disease cases per year per disease
+
+
+PREFIX team:<http://utdallas.edu/incognito#/source/home/dataset/sandy/vocab/raw/>
+
+SELECT ?l ?y ?t (count(?t) as ?a)
+		WHERE {
+  graph ?graph_chronic{
+		  ?s team:locationabbr ?l .
+		  ?s team:topic ?t .
+		  ?s team:yearend ?y.
+  }
+		}
+	
+group by ?l ?y ?t
+		
+order by ?l
+
+
+
+##############################################################################
+

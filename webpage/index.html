@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>College Intake vs Chronic Diseases</title>
+      <link rel="stylesheet" href="css/bootstrap.min.css" />
+      <link rel="stylesheet" href="css/mystyle.css" />
+      <style type="text/css">
+      </style>
+   </head>
+   <body>
+      <nav class="navbar">
+         <div class="container-fluid">
+            <div class="navbar-header">
+               <a class="navbar-brand" href="#">Chronic Disease risk factors for Student intake</a>
+            </div>
+            <ul class="nav navbar-nav">
+               <li class="active"><a id="graph1" href="#">Graph 1</a></li>
+               <li><a id="graph2" href="#">Graph 2</a></li>
+               <li><a id="graph3" href="#">Graph 3</a></li>
+            </ul>
+         </div>
+      </nav>
+
+      <!-- Graph template -->
+      <div id="first" class="page-section">
+         <div class="grid">
+            <h3 id="graph-header" class="geochart-heading" style="text-align: center"></h3>
+            <div id="primary-graph" class="chart">
+            </div>
+            <div id="secondary-graph" class="piechart">
+            </div>
+         </div>
+      </div>
+      <div data-example-id="simple-pre" class="col-md-offset-1 col-md-10">  
+         <h4>Query:</h4>
+         <pre id="sparql-query"></pre>
+      </div>   
+      <!-- End of Graph template -->
+
+      <!--/.page-section-->
+      <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript"></script>
+      <script src="js/bootstrap.min.js" type="text/javascript"></script>
+      <script src="js/incognito.js" type="text/javascript"></script>
+      <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+      <script type="text/javascript">
+         $(document).ready(function() {
+         	// navigation click actions	
+         	$('.scroll-link').on('click', function(event){
+         		event.preventDefault();
+         		var sectionID = $(this).attr("data-id");
+         		scrollToID('#' + sectionID, 750);
+         	});
+         	// scroll to top action
+         	$('.scroll-top').on('click', function(event) {
+         		event.preventDefault();
+         		$('html, body').animate({scrollTop:0}, 'slow'); 		
+         	});
+         	// mobile nav toggle
+         	$('#nav-toggle').on('click', function (event) {
+         		event.preventDefault();
+         		$('#main-nav').toggleClass("open");
+         	});
+            // Nav bar click events
+            $('.navbar-nav>li>a').on('click', function(event) {
+               event.preventDefault();
+               drawVisualizations(event.target.id);
+            });
+         });
+         
+         google.load("visualization", "1", {packages:["corechart", "geochart"]});
+         google.setOnLoadCallback(callback);
+
+         function callback() {
+            drawVisualizations('graph1');
+         }
+
+         currentgraph = 'graph1';
+         
+         function drawVisualizations(graph) {
+            $('#graph-header').text('');
+            $('#primary-graph').text('');
+            $('#secondary-graph').text('');
+            currentgraph = graph;
+            if (graph === 'graph1')
+               firstgraph();
+            else if (graph === 'graph2')
+               secondgraph(); 
+            else if (graph === 'graph3' )
+               thirdgraph();
+         }     
+         
+         $(window).resize(function(){
+         	drawVisualizations(currentgraph);
+         });
+      </script>
+   </body>
+</html>

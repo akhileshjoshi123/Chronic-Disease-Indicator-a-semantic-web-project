@@ -1,0 +1,82 @@
+# Graph Queries
+
+
+#########################
+
+
+Chart Depicting Percentage of Affected Students
+
+
+ PREFIX team:<http://utdallas.edu/incognito#/source/home/dataset/sandy/vocab/raw/> 
+ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> 
+  
+ SELECT distinct ?disease_location (((xsd:float(?disease_count)/xsd:float(?student_count)) * 100) as ?result) 
+ WHERE { 
+     { 
+         SELECT ?disease_location (count(?topic) as ?disease_count) 
+         WHERE { 
+             graph ?graph_chronic { 
+                 ?x team:locationabbr ?disease_location . 
+                 ?x team:topic ?topic . 
+             } 
+         } 
+         group by ?disease_location 
+     } 
+     { 
+         SELECT ?col_location (sum(xsd:integer(?cnt)) as ?student_count) 
+         WHERE { 
+             graph ?graph_college { 
+                 ?y team:stabbr ?col_location . 
+                 ?y team:ugds ?cnt . 
+                 FILTER NOT EXISTS  { 
+                     ?y team:ugds "NULL" 
+                 } 
+             } 
+         } 
+         group by ?col_location 
+     } 
+      FILTER (?col_location = ?disease_location) 
+ } 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ ##################
+ 
+ 
+ Chart Depicting Student Intake
+ 
+ PREFIX team:<http://utdallas.edu/incognito#/source/home/dataset/sandy/vocab/raw/> 
+ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> 
+ select  ?p ( sum(xsd:integer(?cnt)) as ?c ) 
+ where{ 
+   graph ?graph_college{ 
+      ?s team:stabbr ?p . 
+      ?s team:ugds ?cnt . 
+      FILTER NOT EXISTS { 
+         ?s team:ugds "NULL" 
+      } 
+   } 
+ } 
+ group by ?p 
+ 
+ 
+ ###################
+ 
+ Chart Depicting Disease Distribution
+ 
+ 
+ PREFIX team:<http://utdallas.edu/incognito#/source/home/dataset/sandy/vocab/raw/> 
+ SELECT ?l (count(?t) as ?a) 
+ WHERE { 
+      graph ?graph_chronic { 
+         ?s team:locationabbr ?l . 
+         ?s team:topic ?t . 
+         ?s team:yearend ?y. 
+   } 
+ } 
+ group by ?l 

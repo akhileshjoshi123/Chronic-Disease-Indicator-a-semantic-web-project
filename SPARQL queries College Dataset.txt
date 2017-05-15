@@ -1,0 +1,102 @@
+
+SPARQL queries College Dataset
+
+############################################################
+
+NO of student intake for all years state wise 
+
+
+PREFIX team:<http://utdallas.edu/incognito#/source/home/dataset/sandy/vocab/raw/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+select  ?p ( sum(xsd:integer(?cnt)) as ?c )
+where
+{
+graph ?graph_college
+ { ?s team:stabbr ?p .
+   ?s team:ugds ?cnt . 
+FILTER NOT EXISTS
+{
+?s team:ugds "NULL"
+} 
+  
+}  
+
+}
+
+group by ?p
+
+
+http://localhost:3030/dataset.html?tab=upload&ds=/semantic_project#
+
+
+
+########################################################
+
+
+number of student intake per state per year
+
+
+
+PREFIX team:<http://utdallas.edu/incognito#/source/home/dataset/sandy/vocab/raw/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+select  ?p ?year ( sum(xsd:integer(?cnt)) as ?c )
+where
+{
+graph ?graph_college
+ { ?s team:stabbr ?p .
+   ?s team:ugds ?cnt . 
+    ?s team:year ?year.
+FILTER NOT EXISTS
+{
+?s team:ugds "NULL"
+} 
+  
+}  
+
+}
+
+group by ?p ?year
+order by ?p
+
+
+
+
+
+##########################################################################
+
+
+year wise total intake of students (ALL STATES)
+
+
+
+
+PREFIX team:<http://utdallas.edu/incognito#/source/home/dataset/sandy/vocab/raw/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+select  ?year ( sum(xsd:integer(?cnt)) as ?c )
+where
+{
+graph ?graph_college
+ { 
+   ?s team:year ?year.
+   ?s team:ugds ?cnt . 
+    
+FILTER NOT EXISTS
+{
+?s team:ugds "NULL"
+} 
+  
+}  
+
+}
+
+group by ?year
+order by ?year
+
+
+
+
+
+##############################################################################
